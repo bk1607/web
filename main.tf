@@ -14,3 +14,30 @@ resource "aws_lb" "main" {
     Environment = "production"
   }
 }
+
+#security group to allow traffic
+resource "aws_security_group" "main" {
+  name        = "${var.name}-${var.env}"
+  description = "${var.name}-${var.env}"
+  vpc_id      = data.aws_vpc.vpc_id.id
+
+  ingress {
+    description      = "http"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = var.cidr_block
+
+  }
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "${var.name}-${var.env}"
+  }
+}
