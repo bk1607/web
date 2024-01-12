@@ -7,3 +7,4 @@ variable "enable_deletion_protection" {
 }
 variable "env" {}
 variable "cidr_block" {}
+variable "vpc_id" {}
