@@ -1,3 +1,4 @@
+# to create a load balancer
 resource "aws_lb" "main" {
   name               = var.name
   internal           = var.internal
@@ -6,7 +7,6 @@ resource "aws_lb" "main" {
   subnets            = var.subnets
 
   enable_deletion_protection = var.enable_deletion_protection
-
 
 
   tags = {
@@ -41,3 +41,21 @@ resource "aws_security_group" "main" {
     Name = "${var.name}-${var.env}"
   }
 }
+
+# load balancer fixed response
+resource "aws_lb_listener" "main" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "No rule"
+      status_code  = "200"
+    }
+  }
+}
+
